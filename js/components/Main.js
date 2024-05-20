@@ -7,3 +7,5 @@ function Main({ gameFieldButtonsArray, numBombs }) {
     );
 }
 
+
+

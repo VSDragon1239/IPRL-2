@@ -25,44 +25,50 @@ function bombsArrayFunc(arraySize, numBombs) {
 }
 
 function createButtonsMatrix(arraySize, bombArray) {
-    const buttonsMatrix = Array(arraySize).fill(null).map((_, x) =>
-        Array(arraySize).fill(null).map((_, y) => ({
-            id: `${x}-${y}`,
-            hasBomb: bombArray[x][y],
-            isRevealed: false,
-            isFlagged: false,
-            adjacentBombs: 0,
-            className: "gameFieldButton",
-            text: ""
-        }))
+    return Array(arraySize).fill(null).map((_, x) =>
+        Array(arraySize).fill(null).map((_, y) => {
+            const adjacentBombs = calculateAdjacentBombs(x, y, bombArray);
+            return {
+                id: `${x}-${y}`,
+                hasBomb: bombArray[x][y],
+                isRevealed: false,
+                isFlagged: false,
+                adjacentBombs,
+                className: "buttonClass",
+                text: ""
+            };
+        })
     );
+}
 
-    for (let x = 0; x < arraySize; x++) {
-        for (let y = 0; y < arraySize; y++) {
-            if (buttonsMatrix[x][y].hasBomb) continue;
-            let adjacentBombs = 0;
-            for (let i = -1; i <= 1; i++) {
-                for (let j = -1; j <= 1; j++) {
-                    if (x + i >= 0 && x + i < arraySize && y + j >= 0 && y + j < arraySize) {
-                        if (buttonsMatrix[x + i][y + j].hasBomb) {
-                            adjacentBombs++;
-                        }
-                    }
-                }
-            }
-            buttonsMatrix[x][y].adjacentBombs = adjacentBombs;
+function calculateAdjacentBombs(x, y, bombArray) {
+    const directions = [
+        [-1, -1], [-1, 0], [-1, 1],
+        [0, -1], /*[0, 0],*/ [0, 1],
+        [1, -1], [1, 0], [1, 1]
+    ];
+
+    return directions.reduce((count, [dx, dy]) => {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx >= 0 && ny >= 0 && nx < bombArray.length && ny < bombArray[0].length && bombArray[nx][ny]) {
+            return count + 1;
         }
-    }
-
-    return buttonsMatrix;
+        return count;
+    }, 0);
 }
 
 function createButtonsArray(buttonsMatrix) {
-    return buttonsMatrix.flat().map(config => (
-        <button key={config.id} className={config.className} id={config.id}>
-            {config.text}
-        </button>
-    ));
+    return buttonsMatrix.map((row, rowIndex) =>
+        row.map((button, colIndex) => (
+            <div
+                key={button.id}
+                className={`buttonClass ${button.className}`}
+                data-x={rowIndex}
+                data-y={colIndex}
+            >
+                {button.text}
+            </div>
+        ))
+    );
 }
-
-
