@@ -1,7 +1,7 @@
 function Footer() {
     return (
         <footer className="footerStyle" id="idFooter">
-            {/* Footer content here */}
+            {/* Что бы было */}
         </footer>
     );
 }

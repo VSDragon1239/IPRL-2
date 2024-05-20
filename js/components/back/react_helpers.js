@@ -1,12 +1,12 @@
-function createHTMLElement(tag, { className, id, text, src, href }) {
-    const element = document.createElement(tag);
-    if (href) element.href = href;
-    if (src) element.src = src;
-    if (text) element.innerText = text;
-    if (id) element.id = id;
-    if (className) element.className = className;
-    return element;
-}
+// function createHTMLElement(tag, { className, id, text, src, href }) {
+//     const element = document.createElement(tag);
+//     if (href) element.href = href;
+//     if (src) element.src = src;
+//     if (text) element.innerText = text;
+//     if (id) element.id = id;
+//     if (className) element.className = className;
+//     return element;
+// }
 
 function bombsArrayFunc(n, numBombs) {
     let bombsArray = [];
@@ -49,9 +49,22 @@ function createButtonsMatrix(n, bombArray, baseClassName = 'buttonClass') {
 }
 
 function createButtonsArray(buttonsConfig) {
+    const handleClick = (buttonId, buttonText) => {
+        if (buttonText === '💣') {
+            document.getElementById(buttonId).classList.add('bombActiveStyle');
+        } else {
+            alert(`Clicked button with id: ${buttonId}`);
+        }
+    };
+
     return buttonsConfig.map(config => (
-        <button key={config.id} className={config.className} id={config.id}>
+        <div
+            key={config.id}
+            className={`${config.className} ${config.text === '💣' ? 'hiddenBombStyle' : ''}`}
+            id={config.id}
+            onClick={() => handleClick(config.id, config.text)}
+        >
             {config.text}
-        </button>
+        </div>
     ));
 }

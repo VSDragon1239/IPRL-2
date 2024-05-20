@@ -1,68 +1,57 @@
-function createHTMLElement(tag, { className, id, text, src, onClick } = {}) {
-    const element = document.createElement(tag);
-    if (className) element.className = className;
-    if (id) element.id = id;
-    if (text) element.textContent = text;
-    if (src) element.src = src;
-    if (onClick) element.onclick = onClick;
-    return element;
-}
+// function createHTMLElement(tag, { className, id, text, src, href }) {
+//     const element = document.createElement(tag);
+//     if (href) element.href = href;
+//     if (src) element.src = src;
+//     if (text) element.innerText = text;
+//     if (id) element.id = id;
+//     if (className) element.className = className;
+//     return element;
+// }
 
-function bombsArrayFunc(arraySize, numBombs) {
-    const bombArray = Array(arraySize).fill(null).map(() => Array(arraySize).fill(false));
-    let bombsPlaced = 0;
-
-    while (bombsPlaced < numBombs) {
-        const x = Math.floor(Math.random() * arraySize);
-        const y = Math.floor(Math.random() * arraySize);
-        if (!bombArray[x][y]) {
-            bombArray[x][y] = true;
-            bombsPlaced++;
+function bombsArrayFunc(n, numBombs) {
+    let bombsArray = [];
+    for (let row = 0; row < n; row++) {
+        for (let col = 0; col < n; col++) {
+            bombsArray.push(''); // Заполняем массив нулями
         }
     }
 
-    return bombArray;
-}
+    for (let i = 0; i < numBombs; i++) {
+        let bombPosition;
+        do {
+            bombPosition = Math.floor(Math.random() * n * n); // Генерируем случайную позицию для бомбы
+        } while (bombsArray[bombPosition] === '💣'); // Повторяем, пока не найдем позицию без бомбы
 
-function createButtonsMatrix(arraySize, bombArray) {
-    const buttonsMatrix = Array(arraySize).fill(null).map((_, x) =>
-        Array(arraySize).fill(null).map((_, y) => ({
-            id: `${x}-${y}`,
-            hasBomb: bombArray[x][y],
-            isRevealed: false,
-            isFlagged: false,
-            adjacentBombs: 0,
-            className: "gameFieldButton",
-            text: ""
-        }))
-    );
-
-    for (let x = 0; x < arraySize; x++) {
-        for (let y = 0; y < arraySize; y++) {
-            if (buttonsMatrix[x][y].hasBomb) continue;
-            let adjacentBombs = 0;
-            for (let i = -1; i <= 1; i++) {
-                for (let j = -1; j <= 1; j++) {
-                    if (x + i >= 0 && x + i < arraySize && y + j >= 0 && y + j < arraySize) {
-                        if (buttonsMatrix[x + i][y + j].hasBomb) {
-                            adjacentBombs++;
-                        }
-                    }
-                }
-            }
-            buttonsMatrix[x][y].adjacentBombs = adjacentBombs;
-        }
+        bombsArray[bombPosition] = '💣'; // Размещаем бомбу
     }
 
-    return buttonsMatrix;
+    return bombsArray;
 }
 
-function createButtonsArray(buttonsMatrix) {
-    return buttonsMatrix.flat().map(config => (
+function getElement(row, col, n, bombsArray) {
+    return bombsArray[row * n + col];
+}
+
+function createButtonsMatrix(n, bombArray, baseClassName = 'buttonClass') {
+    const buttonsConfig = [];
+    for (let row = 0; row < n; row++) {
+        for (let col = 0; col < n; col++) {
+            const buttonId = `button_${row}_${col}`; // Уникальный идентификатор для каждой кнопки
+            const buttonText = `${getElement(row, col, n, bombArray)}`; // Текст кнопки
+            buttonsConfig.push({
+                className: `${baseClassName}`,
+                id: buttonId,
+                text: buttonText,
+            });
+        }
+    }
+    return buttonsConfig;
+}
+
+function createButtonsArray(buttonsConfig) {
+    return buttonsConfig.map(config => (
         <button key={config.id} className={config.className} id={config.id}>
             {config.text}
         </button>
     ));
 }
-
-
