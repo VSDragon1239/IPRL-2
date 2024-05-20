@@ -198,3 +198,8 @@ h2 {
     background-image: url("/img/flag.png");
     background-size: 2vw;
 }
+
+.bombActiveStyle {
+    background-image: url("/img/elementsOfHarmony.png");
+    background-size: 2vw;
+}

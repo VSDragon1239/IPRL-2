@@ -1,4 +1,3 @@
-
 function createHTMLElement(tag, { className, id, text, src, href }) {
     const element = document.createElement(tag);
     if (href) element.href = href;
@@ -11,7 +10,7 @@ function createHTMLElement(tag, { className, id, text, src, href }) {
 
 
 // ---------------------------------------------------------------------------
-let numBombs = 50
+let numBombs = 10
 let arrayNxN = 16
 
 function bombsArrayFunc(n, numBombs) {

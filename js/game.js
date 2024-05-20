@@ -1,6 +1,3 @@
-//document.getElementsByClassName("buttonClass").addEventListener("click", function() {
-//    alert("Кнопка была нажата!");
-//});
 let idRol = '1'
 let idCol = '1'
 let buttons = document.getElementsByClassName("buttonClass");
@@ -18,7 +15,7 @@ function hiderField (marker) {
             }
         } else if (marker === 0) {
             if (array.className === 'buttonClass bombStyle') {
-                array.textContent = '💣'
+                array.className = 'buttonClass bombActiveStyle'
             }
         }
 
