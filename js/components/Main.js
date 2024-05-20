@@ -1,7 +1,7 @@
-function Main({ gameFieldButtonsArray, numBombs }) {
+function Main() {
     return (
         <main className="mainStyle" id="idMain">
-            <GameField gameFieldButtonsArray={gameFieldButtonsArray} numBombs={numBombs} />
+            <GameField />
             <ScoreBoard />
         </main>
     );
